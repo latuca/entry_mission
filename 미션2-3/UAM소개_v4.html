@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>We Fly the Dream · UAM 소개</title>
+<meta name="description" content="도심항공교통(UAM)을 처음 접하는 분을 위한 소개 페이지 — 수익 모델, 실생활 도움, 사회적 약자 지원">
+<meta name="theme-color" content="#050B18">
+<!-- 글꼴: Pretendard (SIL Open Font License 1.1), Space Grotesk (SIL Open Font License 1.1). 불러오지 못하면 기본 글꼴로 표시됩니다. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#050B18;
+  --cyan:#22D3EE;
+  --sky:#7DD3FC;
+  --ice:#E6F4FF;
+  --muted:rgba(230,244,255,.74);
+  --line:rgba(125,211,252,.24);
+  --glass:rgba(5,11,24,.58);
+  --gx:max(20px, 5vw);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --font-ko:"Pretendard Variable","Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","Segoe UI",sans-serif;
+  --font-en:"Space Grotesk",var(--font-ko);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-snap-type:y proximity;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ice);
+  font-family:var(--font-ko);line-height:1.6;
+  word-break:keep-all;overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--sky)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ───────── 배경: 섹션별 그라데이션 레이어 ───────── */
+.bg{position:fixed;inset:0;z-index:-3;overflow:hidden;pointer-events:none}
+.bg-layer{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--ease)}
+.bg-layer[data-bg="1"]{opacity:1;background:
+  radial-gradient(60% 45% at 72% 32%, rgba(34,211,238,.20), transparent 70%),
+  radial-gradient(80% 50% at 50% 105%, rgba(125,211,252,.20), transparent 70%),
+  linear-gradient(180deg,#01040b 0%,#050B18 45%,#0a1a33 100%)}
+.bg-layer[data-bg="2"]{background:
+  radial-gradient(90% 55% at 50% 100%, rgba(125,211,252,.26), transparent 70%),
+  linear-gradient(180deg,#02060e 0%,#071428 50%,#0d2444 100%)}
+.bg-layer[data-bg="3"]{background:
+  radial-gradient(55% 45% at 18% 18%, rgba(34,211,238,.38), transparent 70%),
+  radial-gradient(60% 50% at 90% 90%, rgba(34,211,238,.20), transparent 70%),
+  linear-gradient(170deg,#021216 0%,#05303a 50%,#08404a 100%)}
+.bg-layer[data-bg="4"]{background:
+  radial-gradient(55% 45% at 82% 14%, rgba(125,211,252,.42), transparent 70%),
+  radial-gradient(70% 50% at 10% 95%, rgba(125,211,252,.18), transparent 70%),
+  linear-gradient(180deg,#05182f 0%,#0c375e 55%,#145583 100%)}
+.bg-layer[data-bg="5"]{background:
+  radial-gradient(80% 45% at 50% 100%, rgba(230,244,255,.32), transparent 70%),
+  radial-gradient(45% 35% at 25% 20%, rgba(125,211,252,.22), transparent 70%),
+  linear-gradient(180deg,#082442 0%,#134a7a 48%,#2c71a6 78%,#5ea8d6 100%)}
+.bg-layer[data-bg="6"]{background:
+  radial-gradient(60% 40% at 50% 30%, rgba(34,211,238,.12), transparent 70%),
+  linear-gradient(180deg,#01040b 0%,#050B18 60%,#081631 100%)}
+html.js .bg-layer[data-bg="1"]{opacity:0}
+html.js[data-active="1"] .bg-layer[data-bg="1"],
+html.js[data-active="2"] .bg-layer[data-bg="2"],
+html.js[data-active="3"] .bg-layer[data-bg="3"],
+html.js[data-active="4"] .bg-layer[data-bg="4"],
+html.js[data-active="5"] .bg-layer[data-bg="5"],
+html.js[data-active="6"] .bg-layer[data-bg="6"]{opacity:1}
+
+/* ───────── 배경: 코드로 그린 도시와 기체 ───────── */
+.scene{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.stars{position:absolute;inset:0 0 40% 0;width:100%;height:60%;transition:opacity 1.4s var(--ease)}
+.city{position:absolute;left:0;right:0;bottom:0;width:100%;height:58vh;transition:opacity 1.4s var(--ease),filter 1.4s var(--ease)}
+.craft{
+  position:absolute;top:12vh;right:3vw;width:min(60vw,860px);
+  transform-origin:70% 40%;
+  transition:transform 1.6s var(--ease),opacity 1.4s var(--ease),filter 1.4s var(--ease);
+}
+.craft svg{display:block;width:100%;height:auto;overflow:visible}
+.craft-float{animation:float 7s ease-in-out infinite}
+.rotor-disc{animation:shimmer 1.6s ease-in-out infinite alternate}
+.rotor-disc:nth-of-type(2n){animation-delay:-.8s}
+.blink{animation:blink 2.4s ease-in-out infinite}
+.vertiport{transition:opacity 1.4s var(--ease)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes shimmer{from{opacity:.55}to{opacity:.95}}
+@keyframes blink{0%,70%,100%{opacity:.15}80%{opacity:1}}
+
+/* 섹션별 장면 상태 */
+html[data-active="1"] .craft{transform:none;opacity:1}
+html[data-active="2"] .craft{transform:translate(-8vw,-4vh) scale(.5);opacity:.75;filter:brightness(.55) saturate(.7)}
+html[data-active="3"] .craft{transform:translate(4vw,-6vh) scale(.32);opacity:.35}
+html[data-active="4"] .craft{transform:translate(-30vw,-6vh) scale(.32);opacity:.35}
+html[data-active="5"] .craft{transform:translate(-14vw,26vh) scale(.36);opacity:.6}
+html[data-active="6"] .craft{transform:translate(10vw,-10vh) scale(.26);opacity:.25}
+html[data-active="3"] .city,html[data-active="4"] .city{opacity:.35}
+html[data-active="5"] .city{opacity:.45;filter:brightness(1.1)}
+html[data-active="3"] .stars,html[data-active="4"] .stars,html[data-active="5"] .stars{opacity:0}
+html[data-active="5"] .vertiport{opacity:1}
+
+/* ───────── 섹션 공통 ───────── */
+main{position:relative}
+.panel{
+  position:relative;min-height:100vh;min-height:100svh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:13vh calc(var(--gx) + 40px) 11vh var(--gx);
+  scroll-snap-align:start;
+}
+.inner{width:100%;max-width:1120px;margin:0 auto}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.7em;margin:0 0 1.2rem;
+  font-family:var(--font-en);font-size:.82rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--sky);
+}
+.eyebrow::before{content:"";width:2.2em;height:1px;background:currentColor;opacity:.8}
+.big{
+  margin:0 0 1.3rem;font-size:clamp(1.95rem,5.2vw,4.3rem);line-height:1.18;font-weight:800;
+  letter-spacing:-.025em;text-wrap:balance;
+  text-shadow:0 0 40px rgba(34,211,238,.25);
+}
+.lead{margin:0 0 2.4rem;max-width:46rem;font-size:clamp(1rem,1.6vw,1.2rem);color:var(--muted);text-shadow:0 1px 12px rgba(5,11,24,.7)}
+
+/* 떠오르는 등장 효과 (JS가 있을 때만 숨김 → JS가 없어도 내용은 보임) */
+html.js .reveal{opacity:0;transform:translateY(42px);filter:blur(6px);
+  transition:opacity .9s var(--ease),transform 1s var(--ease),filter .9s var(--ease);
+  transition-delay:var(--d,0ms)}
+html.js .in .reveal{opacity:1;transform:none;filter:none}
+
+/* ───────── 1. 첫 화면 ───────── */
+.hero{justify-content:center}
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(5,11,24,.82) 0%,rgba(5,11,24,.35) 50%,transparent 75%);
+}
+.hero-title{margin:0;font-weight:800;letter-spacing:-.03em;line-height:1.12}
+.hero-title .line{display:block}
+.hero-title .l1{
+  font-family:var(--font-en);font-size:clamp(2.3rem,6.4vw,5.6rem);color:var(--cyan);
+  text-shadow:0 0 28px rgba(34,211,238,.55);margin-bottom:.12em;
+}
+.hero-title .l2{font-size:clamp(1.9rem,5vw,4.4rem);color:var(--ice);max-width:12em}
+.word{display:inline-block;white-space:nowrap}
+html.js .char{display:inline-block;opacity:0;transform:translateY(.45em);filter:blur(8px);
+  animation:charIn .7s var(--ease) forwards;animation-delay:calc(var(--i) * 55ms + 250ms)}
+@keyframes charIn{to{opacity:1;transform:none;filter:none}}
+.hero-sub{margin:1.6rem 0 0;max-width:30rem;color:var(--muted);font-size:clamp(1rem,1.5vw,1.15rem)}
+html.js .hero-sub,html.js .scroll-cue{opacity:0;animation:fadeIn 1s var(--ease) 2.1s forwards}
+@keyframes fadeIn{to{opacity:1}}
+.scroll-cue{
+  position:absolute;left:50%;bottom:4.5vh;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  font-family:var(--font-en);font-size:.72rem;letter-spacing:.24em;color:var(--sky);text-decoration:none;
+}
+.scroll-cue span{display:block;width:1px;height:42px;background:linear-gradient(var(--sky),transparent);animation:cue 2s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ───────── 2. UAM이란 ───────── */
+.chips{display:flex;flex-wrap:wrap;gap:.6rem;margin:0;padding:0;list-style:none}
+.chips li{padding:.5rem 1rem;border:1px solid var(--line);border-radius:999px;background:var(--glass);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:.95rem;color:var(--ice)}
+.status{
+  margin-top:1.8rem;display:flex;gap:.9rem;align-items:flex-start;max-width:46rem;
+  padding:1rem 1.2rem;border-left:2px solid var(--cyan);background:linear-gradient(90deg,rgba(34,211,238,.12),transparent);
+  border-radius:0 12px 12px 0;color:var(--ice);
+}
+.status b{color:var(--cyan);white-space:nowrap}
+
+/* ───────── 3~5. 동등한 3개 주제 섹션 ───────── */
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none}
+.card{
+  position:relative;display:flex;flex-direction:column;gap:.55rem;
+  padding:22px 20px 24px;border:1px solid var(--line);border-radius:18px;
+  background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 0 rgba(230,244,255,.08),0 20px 50px -30px rgba(0,0,0,.8);
+}
+.card::after{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(140deg,rgba(125,211,252,.45),transparent 35%) border-box;
+  -webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;border:1px solid transparent}
+.card svg{width:34px;height:34px;stroke:var(--cyan);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(34,211,238,.5))}
+.card .num{position:absolute;top:18px;right:18px;font-family:var(--font-en);font-size:.78rem;color:rgba(125,211,252,.6);letter-spacing:.1em}
+.card h3{margin:.35rem 0 0;font-size:1.08rem;font-weight:700;letter-spacing:-.01em}
+.card p{margin:0;font-size:.95rem;color:var(--muted);line-height:1.6}
+.note{display:inline-block;margin:1.4rem 0 0;padding:.3rem .75rem;border-radius:8px;font-size:.85rem;color:rgba(230,244,255,.88);background:rgba(5,11,24,.62)}
+
+#s5 .lead{color:rgba(230,244,255,.9)}
+#s5 .eyebrow{color:var(--ice)}
+
+/* ───────── 6. 마무리와 출처 ───────── */
+.closing .tag{font-family:var(--font-en);font-size:clamp(1.1rem,2vw,1.5rem);color:var(--cyan);margin:0 0 2.2rem;letter-spacing:.02em}
+.sources{
+  border:1px solid var(--line);border-radius:18px;padding:22px 22px 18px;background:var(--glass);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:58rem;
+}
+.sources h3{margin:0 0 .8rem;font-size:1rem;color:var(--sky)}
+.sources ol{margin:0;padding-left:1.3rem;font-size:.9rem;color:var(--muted)}
+.sources li{margin:.35rem 0}
+.sources a{overflow-wrap:anywhere}
+.sources .fine{margin:1rem 0 0;font-size:.8rem;color:rgba(230,244,255,.55);line-height:1.7}
+
+/* ───────── 점 내비게이션 ───────── */
+.dots{position:fixed;right:max(14px,2vw);top:50%;transform:translateY(-50%);z-index:10;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px}
+.dots button{
+  position:relative;display:block;width:14px;height:14px;padding:0;border:0;background:none;cursor:pointer;
+}
+.dots button::before{content:"";position:absolute;inset:3px;border-radius:50%;background:rgba(230,244,255,.38);transition:all .35s var(--ease)}
+.dots button[aria-current="true"]::before{inset:0;background:var(--cyan);box-shadow:0 0 0 4px rgba(34,211,238,.2),0 0 14px rgba(34,211,238,.9)}
+.dots button:hover::before{background:var(--sky)}
+.dots button:focus-visible{outline:2px solid var(--sky);outline-offset:4px;border-radius:50%}
+.dots .label{
+  position:absolute;right:26px;top:50%;transform:translate(6px,-50%);white-space:nowrap;
+  font-size:.8rem;padding:.25rem .6rem;border-radius:6px;background:rgba(5,11,24,.85);border:1px solid var(--line);
+  color:var(--ice);opacity:0;pointer-events:none;transition:all .25s var(--ease)
+}
+@media (hover:hover){.dots button:hover .label,.dots button:focus-visible .label{opacity:1;transform:translate(0,-50%)}}
+/* 터치 화면: 누르기 쉬운 크기(28px)와, 섹션이 바뀔 때 현재 섹션 이름을 잠깐 보여 줌 */
+@media (hover:none),(pointer:coarse){
+  .dots{gap:2px}
+  .dots button{width:28px;height:28px}
+  .dots button::before{inset:10px}
+  .dots button[aria-current="true"]::before{inset:7px}
+  .dots .label{right:32px}
+  .dots button.show .label{opacity:1;transform:translate(0,-50%)}
+}
+
+/* ───────── 반응형 ───────── */
+@media (max-width:980px){
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  :root{--gx:20px}
+  .panel{padding:11vh calc(var(--gx) + 26px) 9vh var(--gx)}
+  .hero{justify-content:flex-end;padding-bottom:16vh}
+  .hero::before{background:linear-gradient(0deg,rgba(5,11,24,.9) 0%,rgba(5,11,24,.5) 45%,transparent 70%)}
+  .craft{top:9vh;right:-14vw;width:110vw}
+  .cards{grid-template-columns:1fr;gap:12px}
+  .card{padding:18px 18px 20px}
+  .card svg{width:28px;height:28px}
+  .dots{right:4px;gap:4px}
+  .city{height:46vh}
+  .status{flex-direction:column;gap:.3rem}
+}
+
+/* 가로로 눕힌 휴대폰처럼 높이가 낮은 화면: SCROLL 표시를 줄이고 기체를 위쪽으로 작게 */
+@media (max-height:520px) and (orientation:landscape){
+  .scroll-cue{bottom:10px;gap:0}
+  .scroll-cue span{display:none}
+  .craft{top:2vh;right:4vw;width:min(42vw,560px)}
+}
+
+/* ───────── 동작 줄이기 ───────── */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  html.js .char,html.js .reveal,html.js .hero-sub,html.js .scroll-cue{opacity:1 !important;transform:none !important;filter:none !important}
+}
+
+/* ───────── 인쇄 ───────── */
+@media print{
+  html{scroll-snap-type:none}
+  body{background:#fff;color:#111}
+  .bg,.scene,.dots,.scroll-cue{display:none !important}
+  .panel{min-height:0;padding:1.2cm 0;break-inside:avoid}
+  .hero::before{display:none}
+  html.js .char,html.js .reveal,html.js .hero-sub{opacity:1 !important;transform:none !important;filter:none !important;animation:none !important}
+  .hero-title .l1{color:#0b6b80;text-shadow:none}
+  .hero-title .l2,.big,.card h3{color:#111;text-shadow:none}
+  .lead,.card p,.hero-sub,.sources ol,.note,.sources .fine{color:#333}
+  .eyebrow,.closing .tag,.sources h3{color:#0b6b80}
+  .card,.sources,.chips li,.status{background:#fff;border:1px solid #bbb;box-shadow:none;backdrop-filter:none}
+  .card::after{display:none}
+  .status b{color:#0b6b80}
+  .chips li,.status,.status span{color:#222}
+  .topic .big,.topic .lead,.topic .card,.topic .note{min-height:0 !important}
+  .note{background:none;padding:0}
+  #s5 .eyebrow{color:#0b6b80}
+  .lead{text-shadow:none}
+  #s5 .lead{color:#333}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  a{color:#0b6b80}
+}
+</style>
+</head>
+<body>
+
+<!-- 배경 레이어 (섹션마다 전환) -->
+<div class="bg" aria-hidden="true">
+  <div class="bg-layer" data-bg="1"></div>
+  <div class="bg-layer" data-bg="2"></div>
+  <div class="bg-layer" data-bg="3"></div>
+  <div class="bg-layer" data-bg="4"></div>
+  <div class="bg-layer" data-bg="5"></div>
+  <div class="bg-layer" data-bg="6"></div>
+</div>
+
+<!-- 코드로 그린 배경 그림: 별, 도시 야경, eVTOL 기체 (글자 없음, 특정 제조사 형상 아님) -->
+<div class="scene" aria-hidden="true">
+  <svg class="stars" id="stars" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMin slice"></svg>
+
+  <svg class="city" id="city" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <linearGradient id="fogGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#7DD3FC" stop-opacity="0"/>
+        <stop offset=".6" stop-color="#7DD3FC" stop-opacity=".10"/>
+        <stop offset="1" stop-color="#E6F4FF" stop-opacity=".22"/>
+      </linearGradient>
+      <linearGradient id="nearGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#0b1c33"/>
+        <stop offset="1" stop-color="#030814"/>
+      </linearGradient>
+      <linearGradient id="midGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#11294a"/>
+        <stop offset="1" stop-color="#081529"/>
+      </linearGradient>
+      <filter id="blur2" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="2"/></filter>
+      <filter id="blur18" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="18"/></filter>
+      <filter id="glowS" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <!-- 구름·안개 (먼 층) -->
+    <g filter="url(#blur18)" opacity=".55">
+      <ellipse cx="260" cy="230" rx="260" ry="34" fill="#7DD3FC" opacity=".10"/>
+      <ellipse cx="1180" cy="190" rx="320" ry="40" fill="#7DD3FC" opacity=".10"/>
+      <ellipse cx="760" cy="300" rx="380" ry="30" fill="#E6F4FF" opacity=".07"/>
+    </g>
+    <g id="far" filter="url(#blur2)" opacity=".75"></g>
+    <rect x="0" y="330" width="1600" height="270" fill="url(#fogGrad)" opacity=".7"/>
+    <g id="mid"></g>
+    <g id="near"></g>
+    <g class="vertiport" id="vertiport" opacity=".55"></g>
+    <rect x="0" y="470" width="1600" height="130" fill="url(#fogGrad)" filter="url(#blur18)" opacity=".9"/>
+  </svg>
+
+  <div class="craft">
+    <div class="craft-float">
+      <svg viewBox="0 0 900 470" role="presentation">
+        <defs>
+          <linearGradient id="fuse" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3a6690"/>
+            <stop offset=".35" stop-color="#173452"/>
+            <stop offset="1" stop-color="#050c18"/>
+          </linearGradient>
+          <linearGradient id="wingG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2b5277"/>
+            <stop offset="1" stop-color="#0a1a2e"/>
+          </linearGradient>
+          <linearGradient id="rim" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#22D3EE" stop-opacity=".2"/>
+            <stop offset=".45" stop-color="#7DD3FC"/>
+            <stop offset="1" stop-color="#E6F4FF" stop-opacity=".9"/>
+          </linearGradient>
+          <linearGradient id="canopy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#0d2a47"/>
+            <stop offset=".45" stop-color="#1c5a86"/>
+            <stop offset=".55" stop-color="#7DD3FC" stop-opacity=".85"/>
+            <stop offset=".62" stop-color="#14456b"/>
+            <stop offset="1" stop-color="#061426"/>
+          </linearGradient>
+          <radialGradient id="disc" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#E6F4FF" stop-opacity=".45"/>
+            <stop offset=".55" stop-color="#7DD3FC" stop-opacity=".16"/>
+            <stop offset=".85" stop-color="#22D3EE" stop-opacity=".22"/>
+            <stop offset="1" stop-color="#22D3EE" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7DD3FC" stop-opacity=".45"/>
+            <stop offset="1" stop-color="#7DD3FC" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="halo" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#22D3EE" stop-opacity=".28"/>
+            <stop offset="1" stop-color="#22D3EE" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+          <filter id="discBlur" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="2.2"/></filter>
+        </defs>
+
+        <!-- 후광과 하향 조명(빛 번짐) -->
+        <ellipse cx="470" cy="210" rx="430" ry="150" fill="url(#halo)"/>
+        <polygon points="420,250 500,248 680,470 250,470" fill="url(#beam)" filter="url(#soft)" opacity=".55"/>
+
+        <!-- 꼬리날개 (V자, 먼 쪽) -->
+        <path d="M640 190 L728 156 L740 164 L672 204 Z" fill="#0b1a2e"/>
+
+        <!-- 동체 -->
+        <path d="M250 238 C250 208 292 188 356 182 L604 174 C646 172 676 184 684 198 C690 212 668 224 632 230 L384 254 C318 262 250 262 250 238 Z" fill="url(#fuse)"/>
+        <!-- 동체 위쪽 림 라이트 -->
+        <path d="M262 222 C282 198 318 188 360 184 L604 176 C640 175 668 184 680 196" fill="none" stroke="url(#rim)" stroke-width="2.4" filter="url(#glow)" opacity=".95"/>
+        <!-- 캐노피 -->
+        <path d="M262 232 C264 214 290 198 332 193 L392 190 C372 204 360 222 356 240 C326 246 286 246 262 232 Z" fill="url(#canopy)"/>
+        <path d="M276 216 C292 202 316 196 344 194" fill="none" stroke="#E6F4FF" stroke-width="1.6" opacity=".7" filter="url(#glow)"/>
+        <!-- 객실 창 -->
+        <g fill="#0a2440" stroke="#7DD3FC" stroke-opacity=".55" stroke-width="1">
+          <rect x="420" y="200" width="34" height="18" rx="7"/>
+          <rect x="464" y="198" width="34" height="18" rx="7"/>
+          <rect x="508" y="196" width="34" height="18" rx="7"/>
+        </g>
+        <path d="M424 205 L446 203 M468 203 L490 201 M512 201 L534 199" stroke="#7DD3FC" stroke-opacity=".7" stroke-width="1.2"/>
+        <!-- 동체 하단 반사광 -->
+        <path d="M300 252 C340 256 380 252 420 248 L620 228" fill="none" stroke="#22D3EE" stroke-opacity=".35" stroke-width="1.4"/>
+
+        <!-- 꼬리날개 (가까운 쪽) -->
+        <path d="M612 182 L690 112 L708 114 L656 190 Z" fill="url(#wingG)"/>
+        <path d="M612 182 L690 112 L708 114" fill="none" stroke="url(#rim)" stroke-width="1.8" filter="url(#glow)"/>
+
+        <!-- 주날개 -->
+        <path d="M66 194 L118 182 L420 172 L560 172 L858 186 L850 202 L560 194 L420 196 L108 206 Z" fill="url(#wingG)"/>
+        <path d="M118 182 L420 172 L560 172 L858 186" fill="none" stroke="url(#rim)" stroke-width="2" filter="url(#glow)"/>
+
+        <!-- 로터: 나셀 + 마스트 + 회전 원판 -->
+        <g id="rotors">
+          <g transform="translate(130 182)">
+            <rect x="-9" y="-10" width="18" height="22" rx="7" fill="#132b47" stroke="#7DD3FC" stroke-opacity=".5"/>
+            <line x1="0" y1="-10" x2="0" y2="-26" stroke="#7DD3FC" stroke-opacity=".6" stroke-width="2"/>
+            <ellipse class="rotor-disc" cx="0" cy="-28" rx="62" ry="10" fill="url(#disc)" filter="url(#discBlur)"/>
+            <ellipse cx="0" cy="-28" rx="62" ry="10" fill="none" stroke="#7DD3FC" stroke-opacity=".35"/>
+            <circle cx="0" cy="-28" r="4" fill="#E6F4FF" filter="url(#glow)"/>
+          </g>
+          <g transform="translate(262 178)">
+            <rect x="-9" y="-10" width="18" height="22" rx="7" fill="#132b47" stroke="#7DD3FC" stroke-opacity=".5"/>
+            <line x1="0" y1="-10" x2="0" y2="-26" stroke="#7DD3FC" stroke-opacity=".6" stroke-width="2"/>
+            <ellipse class="rotor-disc" cx="0" cy="-28" rx="62" ry="10" fill="url(#disc)" filter="url(#discBlur)"/>
+            <ellipse cx="0" cy="-28" rx="62" ry="10" fill="none" stroke="#7DD3FC" stroke-opacity=".35"/>
+            <circle cx="0" cy="-28" r="4" fill="#E6F4FF" filter="url(#glow)"/>
+          </g>
+          <g transform="translate(380 174)">
+            <rect x="-9" y="-10" width="18" height="22" rx="7" fill="#132b47" stroke="#7DD3FC" stroke-opacity=".5"/>
+            <line x1="0" y1="-10" x2="0" y2="-26" stroke="#7DD3FC" stroke-opacity=".6" stroke-width="2"/>
+            <ellipse class="rotor-disc" cx="0" cy="-28" rx="58" ry="9.5" fill="url(#disc)" filter="url(#discBlur)"/>
+            <ellipse cx="0" cy="-28" rx="58" ry="9.5" fill="none" stroke="#7DD3FC" stroke-opacity=".35"/>
+            <circle cx="0" cy="-28" r="4" fill="#E6F4FF" filter="url(#glow)"/>
+          </g>
+          <g transform="translate(600 174)">
+            <rect x="-9" y="-10" width="18" height="22" rx="7" fill="#132b47" stroke="#7DD3FC" stroke-opacity=".5"/>
+            <line x1="0" y1="-10" x2="0" y2="-26" stroke="#7DD3FC" stroke-opacity=".6" stroke-width="2"/>
+            <ellipse class="rotor-disc" cx="0" cy="-28" rx="60" ry="10" fill="url(#disc)" filter="url(#discBlur)"/>
+            <ellipse cx="0" cy="-28" rx="60" ry="10" fill="none" stroke="#7DD3FC" stroke-opacity=".35"/>
+            <circle cx="0" cy="-28" r="4" fill="#E6F4FF" filter="url(#glow)"/>
+          </g>
+          <g transform="translate(722 180)">
+            <rect x="-9" y="-10" width="18" height="22" rx="7" fill="#132b47" stroke="#7DD3FC" stroke-opacity=".5"/>
+            <line x1="0" y1="-10" x2="0" y2="-26" stroke="#7DD3FC" stroke-opacity=".6" stroke-width="2"/>
+            <ellipse class="rotor-disc" cx="0" cy="-28" rx="64" ry="10.5" fill="url(#disc)" filter="url(#discBlur)"/>
+            <ellipse cx="0" cy="-28" rx="64" ry="10.5" fill="none" stroke="#7DD3FC" stroke-opacity=".35"/>
+            <circle cx="0" cy="-28" r="4" fill="#E6F4FF" filter="url(#glow)"/>
+          </g>
+          <g transform="translate(838 186)">
+            <rect x="-9" y="-10" width="18" height="22" rx="7" fill="#132b47" stroke="#7DD3FC" stroke-opacity=".5"/>
+            <line x1="0" y1="-10" x2="0" y2="-26" stroke="#7DD3FC" stroke-opacity=".6" stroke-width="2"/>
+            <ellipse class="rotor-disc" cx="0" cy="-28" rx="66" ry="11" fill="url(#disc)" filter="url(#discBlur)"/>
+            <ellipse cx="0" cy="-28" rx="66" ry="11" fill="none" stroke="#7DD3FC" stroke-opacity=".35"/>
+            <circle cx="0" cy="-28" r="4" fill="#E6F4FF" filter="url(#glow)"/>
+          </g>
+        </g>
+
+        <!-- 착륙 스키드 -->
+        <g stroke="#1d3d60" stroke-width="4" stroke-linecap="round" fill="none">
+          <path d="M360 254 L348 286 M560 236 L572 276"/>
+          <path d="M318 288 L430 284 M528 278 L630 272"/>
+        </g>
+        <path d="M318 286 L430 282 M528 276 L630 270" stroke="#7DD3FC" stroke-opacity=".35" stroke-width="1.2"/>
+
+        <!-- 항법등 (차가운 색) -->
+        <circle cx="68" cy="198" r="4" fill="#E6F4FF" filter="url(#glow)"/>
+        <circle cx="856" cy="194" r="4" fill="#22D3EE" filter="url(#glow)"/>
+        <circle cx="700" cy="114" r="3" fill="#E6F4FF" class="blink" filter="url(#glow)"/>
+        <circle cx="452" cy="252" r="5" fill="#E6F4FF" filter="url(#glow)"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- 점 내비게이션 -->
+<nav aria-label="섹션 이동">
+  <ol class="dots" id="dots">
+    <li><button type="button" data-target="s1" aria-label="1. 첫 화면" aria-current="true"><span class="label">첫 화면</span></button></li>
+    <li><button type="button" data-target="s2" aria-label="2. UAM이란?"><span class="label">UAM이란?</span></button></li>
+    <li><button type="button" data-target="s3" aria-label="3. 수익 모델"><span class="label">수익 모델</span></button></li>
+    <li><button type="button" data-target="s4" aria-label="4. 실생활 도움"><span class="label">실생활 도움</span></button></li>
+    <li><button type="button" data-target="s5" aria-label="5. 사회적 약자 지원"><span class="label">사회적 약자 지원</span></button></li>
+    <li><button type="button" data-target="s6" aria-label="6. 마무리와 출처"><span class="label">마무리와 출처</span></button></li>
+  </ol>
+</nav>
+
+<main>
+  <!-- 1. 첫 화면 -->
+  <section class="panel hero" id="s1" data-section="1" aria-label="첫 화면">
+    <div class="inner">
+      <h1 class="hero-title">
+        <span class="sr-only">We Fly the Dream: 우리는 도시의 지도를 바꿉니다.</span>
+        <span aria-hidden="true" data-split>
+          <span class="line l1">We Fly the Dream:</span>
+          <span class="line l2">우리는 도시의 지도를 바꿉니다.</span>
+        </span>
+      </h1>
+      <p class="hero-sub">도심항공교통(UAM)을 처음 만나는 분을 위한 짧은 소개입니다.</p>
+    </div>
+    <a class="scroll-cue" href="#s2" aria-label="다음 섹션으로">SCROLL<span></span></a>
+  </section>
+
+  <!-- 2. UAM이란? -->
+  <section class="panel" id="s2" data-section="2" aria-labelledby="h2">
+    <div class="inner">
+      <p class="eyebrow reveal">02 · UAM이란? 지금 어디까지 왔나</p>
+      <h2 class="big reveal" id="h2" style="--d:80ms">하늘이 새로운 도로가 됩니다.</h2>
+      <p class="lead reveal" style="--d:200ms">UAM(Urban Air Mobility, 도심항공교통)은 전기 동력으로 수직 이착륙하는 소형 항공기로 도심과 그 주변에서 사람과 화물을 옮기고, 지하철·버스 같은 다른 교통수단과 이어지는 새로운 교통 체계입니다.</p>
+      <ul class="chips reveal" style="--d:320ms">
+        <li>전기 동력</li><li>수직 이착륙</li><li>다른 교통과 연계</li>
+      </ul>
+      <p class="status reveal" style="--d:440ms"><b>한국은 지금</b><span>아직 상업 운항 전이며, 안전하게 운용하기 위한 기술과 기준을 실증하며 갖춰 가는 단계입니다.</span></p>
+    </div>
+  </section>
+
+  <!-- 3. 수익 모델 -->
+  <section class="panel topic" id="s3" data-section="3" aria-labelledby="h3">
+    <div class="inner">
+      <p class="eyebrow reveal">03 · 수익 모델</p>
+      <h2 class="big reveal" id="h3" style="--d:80ms">하늘에서 새로운 사업이 시작됩니다.</h2>
+      <p class="lead reveal" style="--d:200ms">UAM은 하늘을 나는 이동 수단이자, 그 주변에 여러 사업이 함께 생겨날 수 있는 산업입니다.</p>
+      <ul class="cards">
+        <li class="card reveal" style="--d:300ms">
+          <span class="num">01</span>
+          <svg viewBox="0 0 24 24"><path d="M3 20h18M5 20V9l4-3v14M9 20V4l6 3v13M15 20v-9l4 2v7"/></svg>
+          <h3>도심 이동 서비스</h3>
+          <p>도심과 공항, 도심과 부도심을 잇는 항공 택시형 이동 서비스로 운임 수익을 만들 수 있습니다.</p>
+        </li>
+        <li class="card reveal" style="--d:380ms">
+          <span class="num">02</span>
+          <svg viewBox="0 0 24 24"><path d="M2 18c3-2 5-2 8 0s5 2 8 0 3-1 4-1M7 12l4-6 3 4 2-2 4 6"/></svg>
+          <h3>관광·레저 노선</h3>
+          <p>바다, 섬, 산의 풍경을 하늘에서 내려다보는 관광 비행으로 새로운 여행 상품을 만들 수 있습니다.</p>
+        </li>
+        <li class="card reveal" style="--d:460ms">
+          <span class="num">03</span>
+          <svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4zM3 7v10l9 4 9-4V7M12 11v10"/></svg>
+          <h3>응급·물류 운송</h3>
+          <p>긴급한 의약품과 물품, 응급 이송처럼 빠른 속도가 곧 가치가 되는 운송 서비스로 넓힐 수 있습니다.</p>
+        </li>
+        <li class="card reveal" style="--d:540ms">
+          <span class="num">04</span>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+          <h3>연계 사업</h3>
+          <p>기체 운영·정비, 이착륙장(버티포트) 운영, 예약 플랫폼처럼 주변 사업이 함께 생겨날 수 있습니다.</p>
+        </li>
+      </ul>
+      <p class="note reveal" style="--d:620ms">소개를 위한 예시이며, 투자 권유가 아닙니다.</p>
+    </div>
+  </section>
+
+  <!-- 4. 실생활 도움 -->
+  <section class="panel topic" id="s4" data-section="4" aria-labelledby="h4">
+    <div class="inner">
+      <p class="eyebrow reveal">04 · 실생활 도움</p>
+      <h2 class="big reveal" id="h4" style="--d:80ms">이동 시간이 줄면, 하루가 달라집니다.</h2>
+      <p class="lead reveal" style="--d:200ms">땅 위의 길이 막힐 때, 하늘길은 일상의 이동에 새로운 선택지를 더해 줄 수 있습니다.</p>
+      <ul class="cards">
+        <li class="card reveal" style="--d:300ms">
+          <span class="num">01</span>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>
+          <h3>이동 시간 단축</h3>
+          <p>신호와 정체가 없는 하늘길로 이동하면, 매일 길 위에서 보내던 시간을 줄일 수 있습니다.</p>
+        </li>
+        <li class="card reveal" style="--d:380ms">
+          <span class="num">02</span>
+          <svg viewBox="0 0 24 24"><path d="M3 20h18M6 20v-3h4v3M14 20v-3h4v3M4 11c4-6 12-6 16 0M17 8l3 3-4 1"/></svg>
+          <h3>교통 혼잡 우회</h3>
+          <p>출퇴근 시간의 도로 정체를 위로 넘어가며, 땅 위 교통의 부담을 일부 나누어 질 수 있습니다.</p>
+        </li>
+        <li class="card reveal" style="--d:460ms">
+          <span class="num">03</span>
+          <svg viewBox="0 0 24 24"><path d="M2 19h20M4 19l5-8 3 4 3-6 5 10M6 6h.01M18 5h.01"/></svg>
+          <h3>먼 곳과의 연결</h3>
+          <p>도로나 다리가 부족해 오가기 번거로웠던 섬과 산간 지역을 더 가깝게 이어 줄 수 있습니다.</p>
+        </li>
+        <li class="card reveal" style="--d:540ms">
+          <span class="num">04</span>
+          <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><path d="M7.5 12h9M12 5v14"/></svg>
+          <h3>다른 교통과의 환승</h3>
+          <p>지하철·버스·공항과 이어지는 환승 거점이 생기면, 이동 전체가 하나의 흐름이 될 수 있습니다.</p>
+        </li>
+      </ul>
+      <p class="note reveal" style="--d:620ms">상용화 이후 기대할 수 있는 모습을 소개한 것입니다.</p>
+    </div>
+  </section>
+
+  <!-- 5. 사회적 약자 지원 -->
+  <section class="panel topic" id="s5" data-section="5" aria-labelledby="h5">
+    <div class="inner">
+      <p class="eyebrow reveal">05 · 사회적 약자 지원</p>
+      <h2 class="big reveal" id="h5" style="--d:80ms">닿기 어려웠던 곳까지, 하늘이 이어줍니다.</h2>
+      <p class="lead reveal" style="--d:200ms">이동이 어려운 사람에게 UAM이 어떤 도움이 될 수 있는지, 몇 가지 가능성을 그려 봅니다.</p>
+      <ul class="cards">
+        <li class="card reveal" style="--d:300ms">
+          <span class="num">01</span>
+          <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V11l7-6 7 6v10M10 21v-5h4v5"/></svg>
+          <h3>교통이 불편한 지역 주민</h3>
+          <p>버스가 드문 농어촌과 섬 지역 주민이 병원과 행정 서비스에 더 쉽게 닿을 가능성이 있습니다.</p>
+        </li>
+        <li class="card reveal" style="--d:380ms">
+          <span class="num">02</span>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.5"/><path d="M12 8v6M12 14l-3 7M12 14l3 7M8 11h8M17 11v10"/></svg>
+          <h3>이동이 어려운 고령자</h3>
+          <p>먼 거리 이동이 부담스러운 어르신이 갈아타기와 기다림을 줄여 이동할 가능성이 있습니다.</p>
+        </li>
+        <li class="card reveal" style="--d:460ms">
+          <span class="num">03</span>
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="4.5" r="2"/><path d="M11 7v6h5l2 6M11 10h4"/><circle cx="9" cy="16" r="5"/></svg>
+          <h3>휠체어 이용 장애인</h3>
+          <p>기체와 이착륙장을 처음부터 무장애로 설계한다면, 누구나 함께 타는 교통이 될 가능성이 있습니다.</p>
+        </li>
+        <li class="card reveal" style="--d:540ms">
+          <span class="num">04</span>
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 7v10M7 12h10"/></svg>
+          <h3>응급 환자 이송</h3>
+          <p>도로가 막히거나 병원과 멀리 떨어진 곳에서 응급 환자를 더 빨리 옮길 가능성이 있습니다.</p>
+        </li>
+      </ul>
+      <p class="note reveal" style="--d:620ms">실제 도입 방식은 앞으로의 제도와 서비스 설계에 따라 달라질 수 있습니다.</p>
+    </div>
+  </section>
+
+  <!-- 6. 마무리와 출처 -->
+  <section class="panel closing" id="s6" data-section="6" aria-labelledby="h6">
+    <div class="inner">
+      <p class="eyebrow reveal">06 · 마무리</p>
+      <h2 class="big reveal" id="h6" style="--d:80ms">도시의 지도는 다시 그려집니다.</h2>
+      <p class="tag reveal" style="--d:200ms">We Fly the Dream.</p>
+      <footer class="sources reveal" style="--d:320ms">
+        <h3>참고한 자료</h3>
+        <ol>
+          <li>국토교통부, 「K-UAM 안전운용체계 실증기술개발」 예비타당성조사 통과 (2026.9.1), KDI 경제정보센터 게재 — <a href="https://eiec.kdi.re.kr/policy/materialView.do?num=286125" target="_blank" rel="noopener">eiec.kdi.re.kr</a></li>
+          <li>국토교통부, ‘K-UAM 비행 쇼케이스’ 개최 (2026.7.15), KDI 경제정보센터 게재 — <a href="https://eiec.kdi.re.kr/policy/materialView.do?num=284209" target="_blank" rel="noopener">eiec.kdi.re.kr</a></li>
+          <li>이데일리, 국토부 K-UAM ‘2028 상용화’ 목표 보도 (2025.8.28) — <a href="https://v.daum.net/v/20250828110147372" target="_blank" rel="noopener">v.daum.net</a></li>
+          <li>UAM 정의: UAM Team Korea, 「한국형 도심항공교통(K-UAM) 운용개념서 1.0」(2021), 아래 논문에서 재인용 — <a href="https://koreascience.kr/article/JAKO202320857579987.pdf" target="_blank" rel="noopener">koreascience.kr</a></li>
+        </ol>
+        <p class="fine">
+          현황은 2026년 11월 기준이며 실시간으로 갱신되지 않습니다. 이 페이지는 UAM 소개를 위한 것으로, 운항 예약·투자 상담을 제공하지 않습니다.<br>
+          배경 그림은 CSS·SVG 코드로 직접 그렸으며 특정 제조사의 기체가 아닙니다. 글꼴: Pretendard, Space Grotesk (SIL Open Font License 1.1).
+        </p>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  root.classList.add('js');
+  root.setAttribute('data-active','1');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── 간단한 시드 난수 (매번 같은 도시 모양) ── */
+  function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+  var NS='http://www.w3.org/2000/svg';
+  function el(tag,attrs){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
+
+  /* ── 별 ── */
+  (function(){
+    var s=document.getElementById('stars'); if(!s) return; var r=rng(7);
+    for(var i=0;i<90;i++){
+      s.appendChild(el('circle',{cx:(r()*1600).toFixed(1),cy:(r()*420).toFixed(1),r:(r()*1.3+.3).toFixed(2),fill:r()>.7?'#7DD3FC':'#E6F4FF',opacity:(r()*.6+.15).toFixed(2)}));
+    }
+  })();
+
+  /* ── 도시 야경: 세 겹의 건물 + 불 켜진 창 ── */
+  (function(){
+    var r=rng(2026);
+    var layers=[
+      {id:'far', base:360,minH:60, maxH:200,minW:40,maxW:110,fill:'#163457',win:.18,ws:[3,4,9,12]},
+      {id:'mid', base:470,minH:90, maxH:300,minW:50,maxW:120,fill:'url(#midGrad)',win:.28,ws:[4,6,11,15]},
+      {id:'near',base:600,minH:120,maxH:330,minW:70,maxW:150,fill:'url(#nearGrad)',win:.24,ws:[5,7,14,18]}
+    ];
+    var vpDone=false;
+    layers.forEach(function(L){
+      var g=document.getElementById(L.id); if(!g) return;
+      var x=-20;
+      while(x<1620){
+        var w=L.minW+r()*(L.maxW-L.minW), h=L.minH+r()*(L.maxH-L.minH);
+        var y=L.base-h;
+        g.appendChild(el('rect',{x:x.toFixed(1),y:y.toFixed(1),width:w.toFixed(1),height:(h+5).toFixed(1),fill:L.fill}));
+        if(L.id!=='far'){ /* 위쪽 림 라이트 */
+          g.appendChild(el('line',{x1:x.toFixed(1),y1:y.toFixed(1),x2:(x+w).toFixed(1),y2:y.toFixed(1),stroke:'#7DD3FC','stroke-opacity':L.id==='near'?.45:.25,'stroke-width':1.2}));
+        }
+        /* 창문 */
+        var ww=L.ws[0],wh=L.ws[1],sx=L.ws[2],sy=L.ws[3];
+        for(var wy=y+10;wy<L.base-12;wy+=sy){
+          for(var wx=x+7;wx<x+w-ww-5;wx+=sx){
+            if(r()<L.win){
+              g.appendChild(el('rect',{x:wx.toFixed(1),y:wy.toFixed(1),width:ww,height:wh,fill:r()>.6?'#7DD3FC':'#E6F4FF',opacity:(r()*.55+.25).toFixed(2)}));
+            }
+          }
+        }
+        /* 안테나 경고등 (차가운 색) */
+        if(L.id!=='far' && h>L.maxH*.75 && r()>.4){
+          var ax=x+w/2;
+          g.appendChild(el('line',{x1:ax,y1:y,x2:ax,y2:y-22,stroke:'#1f3e62','stroke-width':2}));
+          g.appendChild(el('circle',{cx:ax,cy:y-23,r:2.4,fill:'#22D3EE',class:'blink',filter:'url(#glowS)',style:'animation-delay:-'+(r()*2.4).toFixed(2)+'s'}));
+        }
+        /* 옥상 이착륙장(버티포트) 하나 */
+        if(L.id==='near' && !vpDone && x>1000 && w>90){
+          var vp=document.getElementById('vertiport'), cx=x+w/2;
+          vp.appendChild(el('ellipse',{cx:cx,cy:y-3,rx:w*.38,ry:6,fill:'none',stroke:'#22D3EE','stroke-width':2,filter:'url(#glowS)'}));
+          vp.appendChild(el('ellipse',{cx:cx,cy:y-3,rx:w*.22,ry:3.5,fill:'none',stroke:'#E6F4FF','stroke-opacity':.8,'stroke-width':1.2}));
+          vp.appendChild(el('ellipse',{cx:cx,cy:y-40,rx:w*.5,ry:40,fill:'#7DD3FC',opacity:.12,filter:'url(#blur18)'}));
+          vpDone=true;
+        }
+        x+=w+(L.id==='far'?r()*14:r()*22);
+      }
+    });
+  })();
+
+  /* ── 첫 문장: 글자 단위로 나누기 ── */
+  var split=document.querySelector('[data-split]');
+  if(split && !reduce){
+    var i=0;
+    split.querySelectorAll('.line').forEach(function(line){
+      var words=line.textContent.trim().split(/\s+/);
+      line.textContent='';
+      words.forEach(function(word,wi){
+        var w=document.createElement('span'); w.className='word';
+        Array.from(word).forEach(function(ch){
+          var c=document.createElement('span'); c.className='char'; c.textContent=ch;
+          c.style.setProperty('--i',i++); w.appendChild(c);
+        });
+        line.appendChild(w);
+        if(wi<words.length-1) line.appendChild(document.createTextNode(' '));
+      });
+      i+=3; /* 줄 사이 잠깐 멈춤 */
+    });
+  }
+
+  /* ── 섹션 관찰: 현재 섹션, 배경 전환, 큰 문장 등장 ── */
+  var sections=[].slice.call(document.querySelectorAll('[data-section]'));
+  var dots=[].slice.call(document.querySelectorAll('#dots button'));
+  var labelTimer, lastActive='1';
+  function flashLabel(b){ /* 터치 화면에서만 CSS로 보임 */
+    dots.forEach(function(x){x.classList.remove('show');});
+    b.classList.add('show'); clearTimeout(labelTimer);
+    labelTimer=setTimeout(function(){b.classList.remove('show');},1800);
+  }
+  function setActive(n){
+    root.setAttribute('data-active',n);
+    dots.forEach(function(b,idx){ if(idx+1===+n) b.setAttribute('aria-current','true'); else b.removeAttribute('aria-current'); });
+    if(n!==lastActive){ lastActive=n; if(dots[+n-1]) flashLabel(dots[+n-1]); }
+  }
+  if('IntersectionObserver' in window){
+    var current=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) setActive(e.target.getAttribute('data-section')); });
+    },{rootMargin:'-45% 0px -54% 0px'});
+    var appear=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting) e.target.classList.add('in');
+        else if(e.intersectionRatio===0) e.target.classList.remove('in'); /* 다시 들어오면 다시 떠오름 */
+      });
+    },{threshold:[0,.18]});
+    sections.forEach(function(s){current.observe(s);appear.observe(s);});
+  } else {
+    sections.forEach(function(s){s.classList.add('in');});
+  }
+  if(reduce) sections.forEach(function(s){s.classList.add('in');});
+
+  /* ── 섹션 3·4·5를 같은 크기로: 제목·설명·카드 높이를 가장 큰 값에 맞춤 ── */
+  function equalize(){
+    ['.topic .big','.topic .lead','.topic .card','.topic .note'].forEach(function(sel){
+      var els=[].slice.call(document.querySelectorAll(sel));
+      els.forEach(function(e){e.style.minHeight='';});
+      var max=Math.max.apply(null,els.map(function(e){return e.getBoundingClientRect().height;}));
+      els.forEach(function(e){e.style.minHeight=Math.ceil(max)+'px';});
+    });
+  }
+  equalize();
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(equalize);
+  var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(equalize,150);});
+
+  /* ── 점 내비게이션 클릭 ── */
+  dots.forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=document.getElementById(b.getAttribute('data-target'));
+      if(t) t.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+    });
+  });
+
+  /* ── 인쇄할 때는 모든 내용 표시 ── */
+  window.addEventListener('beforeprint',function(){sections.forEach(function(s){s.classList.add('in');});});
+})();
+</script>
+</body>
+</html>
